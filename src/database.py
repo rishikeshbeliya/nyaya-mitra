@@ -108,7 +108,7 @@ def get_vectorstore(documents=None, force_recreate=False):
         vectorstore = QdrantVectorStore(
             client=client,
             collection_name="legal_system",
-            embeddings=embeddings
+            embedding=embeddings
         )
     return vectorstore
 
