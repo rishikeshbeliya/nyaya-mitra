@@ -1,0 +1,38 @@
+# Exclude Python cache
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Exclude the virtual environment
+.venv/
+venv/
+env/
+
+# Exclude secrets
+.streamlit/secrets.toml
+.env
+
+# Exclude raw PDF data (DB is in Qdrant Cloud - no local data needed in image)
+data/
+
+# Exclude model caches (models download at first run via HuggingFace Hub)
+.cache/
+.hf_cache/
+models/
+*.bin
+*.safetensors
+*.pt
+
+# Exclude dev/IDE files
+.idea/
+.vscode/
+*.DS_Store
+*.log
+logs/
+
+# Exclude notebooks and scratch files
+*.ipynb
+.ipynb_checkpoints/
+
+# Exclude git directory
+.git/
