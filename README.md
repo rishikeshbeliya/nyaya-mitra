@@ -1,207 +1,96 @@
-# ⚖️ Nyaya Mitra — AI Legal Advisor for Indian Law
+# Nyaya Mitra
 
-<div align="center">
+Nyaya Mitra is an Indian legal information retrieval system powered by Retrieval-Augmented Generation (RAG). It matches legal queries and factual scenarios against statutory legal provisions from major Indian codes and acts, returning relevant citations, statutory context, and explanatory legal summaries.
 
-![Python](https://img.shields.io/badge/Python-3.11-blue?style=flat-square&logo=python)
-![Streamlit](https://img.shields.io/badge/Streamlit-1.45-red?style=flat-square&logo=streamlit)
-![LangChain](https://img.shields.io/badge/LangChain-1.3-green?style=flat-square)
-![Groq](https://img.shields.io/badge/LLM-Llama%203.3%2070B%20via%20Groq-orange?style=flat-square)
-![Qdrant](https://img.shields.io/badge/VectorDB-Qdrant%20Cloud-purple?style=flat-square)
-![License](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)
+## Covered Acts & Codes
 
-**A Retrieval-Augmented Generation (RAG) application that provides AI-powered legal guidance across major Indian laws.**
+- **Constitution of India** (Fundamental Rights, DPSP, Constitutional Remedies)
+- **Bharatiya Nyaya Sanhita, 2023 (BNS)**
+- **Bharatiya Nagrik Suraksha Sanhita, 2023 (BNSS)**
+- **Bharatiya Sakshya Adhiniyam, 2023 (BSA)**
+- **Motor Vehicles Act, 1988**
+- **Information Technology Act, 2000**
+- **Sexual Harassment of Women at Workplace (POSH) Act, 2013**
+- **Income Tax Act, 1961**
 
-[🚀 Live Demo on HuggingFace](#) · [📖 Documentation](#-local-setup) · [🐛 Report Issue](https://github.com/rishikeshbeliya/nyaya-mitra/issues)
+## Tech Stack & Architecture
 
-</div>
+- **Interface:** Streamlit
+- **Orchestration:** LangChain
+- **Embeddings:** `AdamLucek/ModernBERT-embed-base-legal-MRL`
+- **Vector Store:** Qdrant Cloud
+- **Inference:** Llama 3.3 70B via Groq
 
----
-
-## 📸 Overview
-
-Nyaya Mitra ("Friend of Justice") is an intelligent legal assistant built on a RAG pipeline. It retrieves the most relevant legal provisions from a Qdrant vector database, then uses **Llama 3.3 70B** (via Groq API) to generate accurate, cited, reader-friendly legal advice — all within seconds.
-
-**Ask scenario-based questions** like:
-> *"A police officer snatched my phone during a traffic check. What are my rights?"*  
-> *"My employer didn't act on my POSH complaint for 3 months. What can I do?"*  
-> *"I lent ₹50,000 to a friend who now refuses to return it. What legal action can I take?"*
+Raw act documents are chunked by chapter/section and indexed into Qdrant. At query time, input queries are contextualized, matched via dense retrieval against indexed provisions, and passed to the LLM to synthesize cited explanations with exact section and chapter references.
 
 ---
 
-## 📚 Covered Laws
-
-| Act | Description |
-|-----|-------------|
-| 🏛️ **Constitution of India** | Fundamental Rights, Duties, Directive Principles |
-| ⚔️ **Bhartiya Nyaya Sanhita (BNS)** | Replacement of IPC — criminal offences & punishments |
-| 🔏 **Bhartiya Nagrik Suraksha Sanhita (BNSS)** | Replacement of CrPC — criminal procedure |
-| 📜 **Bharatiya Sakshya Adhiniyam (BSA)** | Replacement of Indian Evidence Act |
-| 🚗 **Motor Vehicles Act** | Traffic laws, accidents, licensing |
-| 💻 **Information Technology Act** | Cybercrime, digital signatures, data protection |
-| 👩 **POSH Act** | Prevention of Sexual Harassment at Workplace |
-| 💰 **Income Tax Act** | Tax obligations, deductions, assessments |
-
----
-
-## 🏗️ Architecture
-
-```
-User Query
-    │
-    ▼
-Query Optimizer (Groq/Llama 3.3 70B)     ← Fix grammar, enhance semantics
-    │
-    ▼
-Qdrant Vector DB                          ← ModernBERT-legal embeddings
-(Top-5 relevant legal provisions)
-    │
-    ▼
-RAG Prompt Construction
-    │
-    ▼
-Llama 3.3 70B via Groq API               ← Generate cited legal advice
-    │
-    ▼
-Streamlit UI                              ← Display advice + source citations
-```
-
-**Tech Stack:**
-- **LLM:** `meta-llama/llama-3.3-70b-versatile` via Groq API (free tier)
-- **Embeddings:** `AdamLucek/ModernBERT-embed-base-legal-MRL` (domain-specific legal embeddings)
-- **Vector DB:** Qdrant Cloud (free tier)
-- **Framework:** LangChain 1.x + Streamlit
-- **Deployment:** Docker → HuggingFace Spaces
-
----
-
-## 🚀 Local Setup
+## Getting Started
 
 ### Prerequisites
-- Python 3.11+
-- Free accounts: [Qdrant Cloud](https://cloud.qdrant.io), [Groq](https://console.groq.com)
 
-### 1. Clone & Install
+- Python 3.11+
+- Qdrant Cloud cluster and API key
+- Groq API key
+
+### 1. Installation
+
 ```bash
 git clone https://github.com/rishikeshbeliya/nyaya-mitra.git
 cd nyaya-mitra
+
 python -m venv .venv
-.venv\Scripts\activate        # Windows
-# source .venv/bin/activate   # Linux/macOS
+# On Windows:
+.venv\Scripts\activate
+# On macOS/Linux:
+source .venv/bin/activate
+
 pip install -r requirements.txt
 ```
 
-### 2. Configure Secrets
-Create `.streamlit/secrets.toml` (this file is gitignored — never committed):
+### 2. Configuration
+
+Create `.streamlit/secrets.toml`:
+
 ```toml
-qdrant_url     = "https://YOUR-CLUSTER.qdrant.io"
-qdrant_api_key = "YOUR_QDRANT_API_KEY"
-groq_api_key   = "gsk_YOUR_GROQ_KEY"
+qdrant_url = "https://your-cluster-id.qdrant.io"
+qdrant_api_key = "your_qdrant_api_key"
+groq_api_key = "gsk_your_groq_api_key"
 ```
 
-### 3. Add PDFs & Ingest (one-time)
-Place the following PDFs in the `data/` directory:
-```
-data/
-├── constituition.pdf
-├── bns.pdf
-├── bnss.pdf
-├── bsa.pdf
-├── motor.pdf
-├── info_tech.pdf
-├── posh.pdf
-└── income.pdf
-```
-Then run:
+Environment variables (`QDRANT_URL`, `QDRANT_API_KEY`, `GROQ_API_KEY`) can also be used if deploying via container or cloud host.
+
+### 3. Data Ingestion (One-time)
+
+If populating a fresh collection, place the statutory source PDFs in the `data/` folder and run:
+
 ```bash
-.venv\Scripts\python.exe -u ingest.py    # Windows
-# python -u ingest.py                    # Linux/macOS
+python ingest.py
 ```
 
-### 4. Launch App
+### 4. Running the Web App
+
 ```bash
 streamlit run app.py
 ```
-Open `http://localhost:8501`
 
 ---
 
-## 🐳 HuggingFace Spaces Deployment (Docker)
+## Deployment (Docker)
 
-### Step 1: Create a Space
-1. Go to [huggingface.co/new-space](https://huggingface.co/new-space)
-2. Set **SDK** → `Docker`
-3. Set **Hardware** → `CPU Basic` (free)
-4. Name it `nyaya-mitra`
+The included `Dockerfile` builds a production container exposing port `7860`:
 
-### Step 2: Add Repository Secrets
-In your Space → **Settings → Repository secrets**, add:
-
-| Name | Value |
-|------|-------|
-| `QDRANT_URL` | Your Qdrant Cloud cluster URL |
-| `QDRANT_API_KEY` | Your Qdrant API key |
-| `GROQ_API_KEY` | Your Groq API key (`gsk_...`) |
-
-### Step 3: Push to HuggingFace
 ```bash
-# Copy the HF README header first
-copy SPACES_README.md README.md   # This becomes the HF Space card
-
-git remote add hf https://huggingface.co/spaces/rishikeshbeliya/nyaya-mitra
-git push hf main
-```
-HuggingFace will auto-build via Docker and deploy. First build takes ~5 minutes.
-
-> **Note:** The embedding model (`ModernBERT-legal`) is downloaded automatically on first startup (~400MB). Subsequent starts are instant.
-
----
-
-## 📁 Project Structure
-
-```
-nyaya-mitra/
-├── app.py                  # Streamlit UI (dark/light theme, citations, RAG pipeline)
-├── ingest.py               # One-time ingestion script (parse PDFs → Qdrant)
-├── requirements.txt        # Pinned Python dependencies
-├── Dockerfile              # Multi-stage Docker build for HF Spaces
-├── .dockerignore           # Excludes data/, venv, secrets from image
-├── .gitignore              # Excludes secrets, data, model cache
-├── README.md               # This file
-├── SPACES_README.md        # HuggingFace Space card header
-├── data/                   # (gitignored) Local PDF source files
-└── src/
-    ├── __init__.py
-    ├── parsers.py          # Custom PDF parsers per act (regex-based)
-    ├── database.py         # Qdrant client + ModernBERT embeddings
-    └── llm.py              # Groq LLM + query optimizer + RAG chain
+docker build -t nyaya-mitra .
+docker run -p 7860:7860 \
+  -e QDRANT_URL="https://your-cluster-id.qdrant.io" \
+  -e QDRANT_API_KEY="your_key" \
+  -e GROQ_API_KEY="your_groq_key" \
+  nyaya-mitra
 ```
 
 ---
 
-## ⚙️ Environment Variables
+## Legal Disclaimer
 
-The app reads secrets from `.streamlit/secrets.toml` locally, or from environment variables in Docker/HF Spaces:
-
-| Variable | Description |
-|----------|-------------|
-| `QDRANT_URL` | Qdrant Cloud cluster URL |
-| `QDRANT_API_KEY` | Qdrant REST API key |
-| `GROQ_API_KEY` | Groq API key for Llama 3.3 70B inference |
-
----
-
-## ⚠️ Disclaimer
-
-This tool is for **educational and informational purposes only** and does not constitute professional legal advice. Always consult a qualified legal professional for specific legal matters.
-
----
-
-## 📄 License
-
-MIT License — see [LICENSE](LICENSE) for details.
-
----
-
-<div align="center">
-Made with ❤️ for Indian citizens seeking accessible legal information
-</div>
+Nyaya Mitra is intended for informational and academic purposes only. It is not an alternative to formal legal counsel from an advocate or attorney.
