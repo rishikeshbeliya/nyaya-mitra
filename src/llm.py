@@ -60,8 +60,9 @@ def load_llm():
     api_key = get_groq_api_key()
     if not api_key:
         raise ValueError("Groq API key not found. Add `groq_api_key` to .streamlit/secrets.toml")
+    model_name = os.environ.get("GROQ_MODEL", "openai/gpt-oss-120b")
     _llm = ChatGroq(
-        model="llama-3.3-70b-versatile",
+        model=model_name,
         api_key=api_key,
         temperature=0.1,
         max_tokens=1024,
