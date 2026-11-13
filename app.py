@@ -243,7 +243,7 @@ with st.sidebar:
     # ── LLM Status ──
     st.markdown("**🤖 Model Info**")
     st.markdown("""
-    - **LLM:** `Llama 3.3 70B` via Groq
+    - **LLM:** `gpt-oss-120b` via Groq
     - **Embeddings:** `ModernBERT-legal`
     - **Vector DB:** Qdrant Cloud
     """)
@@ -343,7 +343,7 @@ if submit and user_input.strip():
         retrieved_docs = retriever.invoke(optimized)
 
         # Step 4: Generate answer
-        status.write("Generating legal analysis with Llama 3.3 70B...")
+        status.write("Generating legal analysis...")
         try:
             context_str = full_context(retrieved_docs)
             advice = get_legal_answer(context_str, user_input)
@@ -371,7 +371,7 @@ if submit and user_input.strip():
         st.markdown(f"""
         <div class="answer-card">
             <div class="answer-head">⚖️ Official Legal Analysis</div>
-            <div class="answer-meta">Generated strictly from retrieved Indian legal provisions · Llama 3.3 70B · Qdrant RAG</div>
+            <div class="answer-meta">Generated strictly from retrieved Indian legal provisions · Qdrant RAG</div>
         </div>
         """, unsafe_allow_html=True)
         st.markdown(advice)
