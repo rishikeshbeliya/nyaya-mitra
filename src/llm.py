@@ -9,7 +9,7 @@ from langchain_core.messages import SystemMessage, HumanMessage
 # Global for lazy loading
 _llm = None
 
-SYSTEM_PROMPT = """You are Nyaya Mitra — an Official AI Legal Advisor for the following Indian laws:
+SYSTEM_PROMPT = """You are Nyaya Mitra, a legal research assistant specialized in Indian law covering the following acts:
 - Constitution of India
 - Bhartiya Nyaya Sanhita (BNS)
 - Bhartiya Nagrik Suraksha Sanhita (BNSS)

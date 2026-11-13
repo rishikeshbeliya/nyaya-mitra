@@ -6,7 +6,7 @@ from src.llm import optimise_query, full_context, get_legal_answer, load_llm
 
 # ─── 1. Page Config ──────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Nyaya Mitra — AI Legal Advisor",
+    page_title="Nyaya Mitra — Legal Research Assistant",
     page_icon="⚖️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -214,7 +214,7 @@ with st.sidebar:
     st.markdown("""
     <div class="brand-wrap">
         <div class="brand-logo">⚖️ Nyaya Mitra</div>
-        <div class="brand-sub">AI Legal Advisor · Indian Law</div>
+        <div class="brand-sub">Legal Research & Citation Assistant</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -284,11 +284,10 @@ with st.sidebar:
 # Hero header
 st.markdown("""
 <div class="hero-card">
-    <div class="hero-title">⚖️ Nyaya Mitra AI</div>
+    <div class="hero-title">⚖️ Nyaya Mitra</div>
     <div class="hero-sub">
-        Your expert AI legal guide across the Constitution of India, BNS, BNSS, BSA,
+        Statutory legal guidance and section citation assistant for Indian law across the Constitution of India, BNS, BNSS, BSA,
         Motor Vehicles Act, Information Technology Act, POSH Act, and Income Tax Act.
-        Powered by Llama 3.3 70B &amp; Qdrant vector retrieval.
     </div>
 </div>
 """, unsafe_allow_html=True)
