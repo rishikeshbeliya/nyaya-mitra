@@ -101,10 +101,10 @@ def get_vectorstore(documents=None, force_recreate=False):
         for i in range(chunk_size, len(documents), chunk_size):
             sub_chunk = documents[i:i+chunk_size]
             print(f"Uploading next batch of documents: {i} to {min(i+chunk_size, len(documents))}...")
-            vectorstore.add_documents(sub_chunk, batch_size=32, timeout=180.0)
+            vectorstore.add_documents(sub_chunk, batch_size=32, timeout=180)
             
     else:
-        client = QdrantClient(url=qdrant_url, api_key=qdrant_api_key, timeout=180.0)
+        client = QdrantClient(url=qdrant_url, api_key=qdrant_api_key, timeout=180)
         vectorstore = QdrantVectorStore(
             client=client,
             collection_name="legal_system",
