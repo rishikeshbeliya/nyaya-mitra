@@ -1,3 +1,12 @@
+---
+title: Nyaya Mitra
+emoji: ⚖️
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+pinned: false
+---
+
 # Nyaya Mitra
 
 Nyaya Mitra is an Indian legal information retrieval system powered by Retrieval-Augmented Generation (RAG). It matches legal queries and factual scenarios against statutory legal provisions from major Indian codes and acts, returning relevant citations, statutory context, and explanatory legal summaries.
@@ -19,7 +28,7 @@ Nyaya Mitra is an Indian legal information retrieval system powered by Retrieval
 - **Orchestration:** LangChain
 - **Embeddings:** `AdamLucek/ModernBERT-embed-base-legal-MRL`
 - **Vector Store:** Qdrant Cloud
-- **Inference:** Llama 3.3 70B via Groq
+- **Inference:** Llama 3.3 70B / GPT-OSS 120B via Groq
 
 Raw act documents are chunked by chapter/section and indexed into Qdrant. At query time, input queries are contextualized, matched via dense retrieval against indexed provisions, and passed to the LLM to synthesize cited explanations with exact section and chapter references.
 
